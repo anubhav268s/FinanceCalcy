@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FinanceCalcy - SIP & Withdrawal Calculator</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- Open Graph Meta Tags for URL Preview
+    <meta property="og:title" content="Calcy - SIP & Withdrawal Calculator">
+    <meta property="og:description" content="Plan your investments smartly with SIP, Lumpsum, and SWP calculators.">
+    <meta property="og:image" content="https://financecalcy.tiiny.site/logo.jpeg">
+    <meta property="og:url" content="https://financecalcy.tiiny.site">
+    <meta property="og:type" content="website"> -->
+    
+    <!-- Favicon for Browser Tab -->
+    <link rel="icon" type="image/png" href="https://financecalcy.tiiny.site/favicon.png">
+</head>
+
+<body>
+    <header>
+        <div class="logo">
+            <img src="logo.jpeg" alt="Calcy Logo">
+            <span class="logo-text">Finance Calcy</span>
+        </div>
+        <div class="menu-icon" onclick="toggleMenu()">&#9776;</div> <!-- Hamburger Icon -->
+        <nav>
+            <ul id="nav-menu">
+                <li><a href="#">Home</a></li>
+                <li><a href="#calculator">Calculators</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+
+
+    <!-- Calculator Section -->
+
+
+    <div id="calculator" class="container">
+        <h1>Finance Calcy</h1>
+        <!-- Tab Buttons -->
+        <div class="tab-buttons">
+            <button class="active" onclick="switchTab('sip', event)">SIP</button>
+            <button onclick="switchTab('lumpsum', event)">Lumpsum</button>
+            <button onclick="switchTab('withdraw', event)">Smart Withdrawal Plan</button>
+        </div>
+
+        <!-- SIP Calculator -->
+        <div id="sip" class="tab-content active">
+            <h4>SIP Calculator</h4>
+
+            <label>Monthly Investment: ₹</label>
+            <input type="number" id="sip-amount-value" min="500" max="100000" step="500" value="25000"
+                oninput="updateValue('sip-amount-value', true)">
+            <span id="sip-amount-value-warning" class="warning"></span>
+            <input type="range" id="sip-amount" min="500" max="100000" step="500" value="25000"
+                oninput="updateValue('sip-amount-value')">
+
+            <label>Return Rate (p.a):</label>
+            <input type="number" id="sip-rate-value" min="1" max="30" step="0.1" value="12"
+                oninput="updateValue('sip-rate-value', true)">
+            <span id="sip-rate-value-warning" class="warning"></span>
+            <input type="range" id="sip-rate" min="1" max="30" step="0.1" value="12"
+                oninput="updateValue('sip-rate-value')">
+
+            <label>Time (Years):</label>
+            <input type="number" id="sip-time-value" min="1" max="40" step="1" value="10"
+                oninput="updateValue('sip-time-value', true)">
+            <span id="sip-time-value-warning" class="warning"></span>
+            <input type="range" id="sip-time" min="1" max="40" step="1" value="10"
+                oninput="updateValue('sip-time-value')">
+
+            <button onclick="calculateSIP()">Calculate</button>
+            <div id="sip-result" class="result"></div>
+            <canvas id="sip-chart"></canvas>
+        </div>
+
+        <!-- Lumpsum Calculator -->
+        <div id="lumpsum" class="tab-content">
+            <h4>Lumpsum Calculator</h4>
+
+            <label>Investment: ₹</label>
+            <input type="number" id="lumpsum-amount-value" min="10000" max="10000000" step="5000" value="500000"
+                oninput="updateValue('lumpsum-amount-value', true)">
+            <span id="lumpsum-amount-value-warning" class="warning"></span>
+            <input type="range" id="lumpsum-amount" min="10000" max="10000000" step="5000" value="500000"
+                oninput="updateValue('lumpsum-amount-value')">
+
+            <label>Return Rate (p.a):</label>
+            <input type="number" id="lumpsum-rate-value" min="1" max="30" step="0.1" value="12"
+                oninput="updateValue('lumpsum-rate-value', true)">
+            <span id="lumpsum-rate-value-warning" class="warning"></span>
+            <input type="range" id="lumpsum-rate" min="1" max="30" step="0.1" value="12"
+                oninput="updateValue('lumpsum-rate-value')">
+
+            <label>Time (Years):</label>
+            <input type="number" id="lumpsum-time-value" min="1" max="40" step="1" value="10"
+                oninput="updateValue('lumpsum-time-value', true)">
+            <span id="lumpsum-time-value-warning" class="warning"></span>
+            <input type="range" id="lumpsum-time" min="1" max="40" step="1" value="10"
+                oninput="updateValue('lumpsum-time-value')">
+
+            <button onclick="calculateLumpsum()">Calculate</button>
+            <div id="lumpsum-result" class="result"></div>
+            <canvas id="lumpsum-chart"></canvas>
+        </div>
+
+        <!-- Smart Withdrawal Plan (SWP) -->
+        <div id="withdraw" class="tab-content">
+            <h4>SWP</h4>
+
+            <label>Investment: ₹</label>
+            <input type="number" id="withdraw-amount-value" min="10000" max="50000000" step="10000" value="100000"
+                oninput="updateValue('withdraw-amount-value', true)">
+            <span id="withdraw-amount-value-warning" class="warning"></span>
+            <input type="range" id="withdraw-amount" min="10000" max="50000000" step="10000" value="100000"
+                oninput="updateValue('withdraw-amount-value')">
+
+            <label>Return Rate (p.a):</label>
+            <input type="number" id="withdraw-rate-value" min="1" max="30" step="0.1" value="15"
+                oninput="updateValue('withdraw-rate-value', true)">
+            <span id="withdraw-rate-value-warning" class="warning"></span>
+            <input type="range" id="withdraw-rate" min="1" max="30" step="0.1" value="15"
+                oninput="updateValue('withdraw-rate-value')">
+
+            <label>Time (Years):</label>
+            <input type="number" id="withdraw-time-value" min="1" max="40" step="1" value="5"
+                oninput="updateValue('withdraw-time-value', true)">
+            <span id="withdraw-time-value-warning" class="warning"></span>
+            <input type="range" id="withdraw-time" min="1" max="40" step="1" value="5"
+                oninput="updateValue('withdraw-time-value')">
+
+            <label>Withdrawal per Month: ₹</label>
+            <input type="number" id="withdraw-monthly-value" min="100" max="500000" step="100" value="100"
+                oninput="updateValue('withdraw-monthly-value', true)">
+            <span id="withdraw-monthly-value-warning" class="warning"></span>
+            <input type="range" id="withdraw-monthly" min="100" max="500000" step="100" value="100"
+                oninput="updateValue('withdraw-monthly-value')">
+
+            <button onclick="calculateWithdrawal()">Calculate</button>
+            <div id="withdraw-result" class="result"></div>
+            <canvas id="withdraw-chart"></canvas>
+        </div>
+
+
+
+        <!-- About Section -->
+        <div id="about" class="aboutSection">
+            <h2>About Us</h2>
+            <p>Use our calculators to plan your financial future with SIP, Lumpsum, and Smart Withdrawals.</p>
+            <p>Calcy is a smart and user-friendly investment calculator that helps you make informed financial
+                decisions.</p>
+        </div>
+
+        <!-- Contact Section -->
+        <div id="contact" class="aboutSection">
+            <h2>Contact Us</h2>
+
+            <p>Email: <a href="mailto:financecalcys@gmail.com?subject=Support%20Request&body=Hello%20Calcy%20Team,">FinanceCalcys@gmail.com</a></p>
+
+            <!-- <p>Phone: +91 98765 43210</p> -->
+        </div>
+    </div>
+
+
+    <footer>
+        <p>Version 1.0 | Created by <strong>Anubhav</strong></p>
+    </footer>
+
+
+
+    <script src="script.js"></script>
+</body>
+
+</html>
